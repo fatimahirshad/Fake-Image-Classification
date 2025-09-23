@@ -84,7 +84,7 @@ class DeepFakeDetectorCNN(nn.Module):
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 CLASS_NAMES = ["Original", "Deepfakes", "Face2Face", "FaceSwap", "NeuralTextures", "FaceShifter"]
 
-MODEL_PATH = "ImageClassification.pth"   # ✅ place this file in repo root
+MODEL_PATH = "best_model.pth"   # ✅ place this file in repo root
 
 model = DeepFakeDetectorCNN(num_classes=6).to(DEVICE)
 state_dict = torch.load(MODEL_PATH, map_location="cpu")
