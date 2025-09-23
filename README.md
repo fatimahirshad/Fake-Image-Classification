@@ -1,3 +1,15 @@
+---
+title: Deepfake Detector 🕵️
+emoji: 👀
+colorFrom: indigo
+colorTo: blue
+sdk: gradio
+sdk_version: 4.29.0
+app_file: app.py
+pinned: false
+license: apache-2.0
+---
+
 # 🕵️ Deepfake Detector (not a pretrained model)
 
 Detect whether an uploaded face image is **real** or a type of **deepfake** using a trained CNN model.  
