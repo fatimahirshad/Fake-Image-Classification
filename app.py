@@ -23,6 +23,13 @@ def classify(image):
 # --------------------------
 # Build UI
 # --------------------------
+examples = [
+    ["example_images/deepfakesf0.jpg"],
+    ["example_images/original.jpg"],
+    ["example_images/face2face_f4.jpg"],
+    ["example_images/faceshfifter_f4.jpg"],
+]
+
 with gr.Blocks(theme=gr.themes.Soft()) as demo:
     gr.Markdown(
         """
@@ -37,6 +44,13 @@ with gr.Blocks(theme=gr.themes.Soft()) as demo:
             submit_btn = gr.Button("🔍 Analyze", variant="primary")
         with gr.Column(scale=1):
             output_label = gr.Label(num_top_classes=3, label="Prediction (Top 3)")
+
+    # Add example images
+    gr.Examples(
+        examples=examples,
+        inputs=input_img,
+        label="Try with example images"
+    )
 
     # Link button to function
     submit_btn.click(fn=classify, inputs=input_img, outputs=output_label)
