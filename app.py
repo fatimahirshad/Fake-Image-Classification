@@ -52,6 +52,22 @@ with gr.Blocks(theme=gr.themes.Soft()) as demo:
         label="Try with example images"
     )
 
+    # 📦 About Model + Tips Accordion
+    with gr.Accordion("📦 About the Model", open=False):
+        gr.Markdown(
+            """
+            ### 🔹 Model Specialty  
+            - Trained on **FaceForensics++ (FF++) dataset**  
+            - Detects **Deepfakes, FaceSwap, Face2Face, Neural Textures**  
+            - Achieved **92% accuracy** on unseen test data  
+
+            ### 💡 Tips for Best Results  
+            - Upload clear frontal face images  
+            - Avoid low-light / blurred images  
+            - Works best on single-face photos
+            """
+        )
+
     # Link button to function
     submit_btn.click(fn=classify, inputs=input_img, outputs=output_label)
 
