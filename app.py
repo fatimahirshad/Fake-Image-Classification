@@ -7,8 +7,12 @@ from model_inference import model, transform, CLASS_NAMES, DEVICE
 import torch
 import torch.nn.functional as F
 from PIL import Image
+import time
 
 def classify(image):
+    # Optional delay so scanning animation is visible
+    time.sleep(2)  
+
     # Preprocess
     image = Image.fromarray(image).convert("RGB")
     img_tensor = transform(image).unsqueeze(0).to(DEVICE)
@@ -18,7 +22,8 @@ def classify(image):
 
     # Make dictionary {class: prob}
     results = {CLASS_NAMES[i]: float(probs[i]) for i in range(len(CLASS_NAMES))}
-    return results
+    return results, gr.update(visible=False)  # hide scanning box after prediction
+
 
 # --------------------------
 # Build UI
@@ -63,6 +68,37 @@ with gr.Blocks(theme=gr.themes.Soft()) as demo:
                 )
                 output_label = gr.Label(num_top_classes=3, label="Prediction")
 
+            # 🔵 Scanning animation box (hidden by default)
+            scan_box = gr.HTML(
+                """
+                <div id="scanbox" style="position: relative; width: 100%; height: 180px; 
+                    background: linear-gradient(to bottom, #002244, #0044aa); 
+                    border-radius: 12px; 
+                    overflow: hidden; 
+                    border: 2px solid #00eaff; 
+                    box-shadow: 0 0 20px #00eaff;">
+                    
+                    <div style="position: absolute; top: -100%; left: 0; right: 0; bottom: 0;
+                        background: linear-gradient(to bottom, rgba(0,255,255,0.8), rgba(0,255,255,0));
+                        animation: scanmove 2s linear infinite;"></div>
+                    
+                    <h3 style="position: absolute; top: 50%; left: 50%; 
+                        transform: translate(-50%, -50%);
+                        color: #00ffcc; font-family: monospace; text-shadow: 0 0 10px #00eaff;">
+                        🔍 Scanning...
+                    </h3>
+                </div>
+
+                <style>
+                @keyframes scanmove {
+                    from { top: -100%; }
+                    to { top: 100%; }
+                }
+                </style>
+                """,
+                visible=False,
+            )
+
     # Add example images
     gr.Examples(
         examples=examples,
@@ -97,8 +133,16 @@ with gr.Blocks(theme=gr.themes.Soft()) as demo:
             """,
         )
 
-    # Link button to function
-    submit_btn.click(fn=classify, inputs=input_img, outputs=output_label)
+    # 🔗 Button workflow: show scan box → run classify → hide scan box + show results
+    submit_btn.click(
+        fn=lambda x: (gr.update(visible=True), x),
+        inputs=input_img,
+        outputs=[scan_box, input_img],
+    ).then(
+        fn=classify,
+        inputs=input_img,
+        outputs=[output_label, scan_box],
+    )
 
 # --------------------------
 # Launch
