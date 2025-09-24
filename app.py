@@ -1,3 +1,7 @@
+# ==========================
+# app.py (Deepfake Detector with Neon UI + Green Scanning Overlay)
+# ==========================
+
 import gradio as gr
 from model_inference import model, transform, CLASS_NAMES, DEVICE
 import torch
@@ -9,7 +13,7 @@ import time
 # Inference function
 # --------------------------
 def classify(image):
-    # Simulate processing delay
+    # Simulate processing delay for scanning effect
     time.sleep(2)
 
     image = Image.fromarray(image).convert("RGB")
@@ -20,6 +24,7 @@ def classify(image):
 
     results = {CLASS_NAMES[i]: float(probs[i]) for i in range(len(CLASS_NAMES))}
     return results
+
 
 # --------------------------
 # Build UI
@@ -44,8 +49,8 @@ with gr.Blocks(theme=gr.themes.Soft(), css="""
     width: 100%; height: 100%;
     background: repeating-linear-gradient(
         to bottom,
-        rgba(0, 255, 255, 0.25),
-        rgba(0, 255, 255, 0.25) 2px,
+        rgba(0, 255, 0, 0.25),   /* neon green lines */
+        rgba(0, 255, 0, 0.25) 2px,
         transparent 2px,
         transparent 4px
     );
@@ -58,7 +63,12 @@ with gr.Blocks(theme=gr.themes.Soft(), css="""
     100% { background-position: 0 100%; }
 }
 """) as demo:
-    gr.Markdown("# 🕵️ Deepfake Detector")
+    gr.Markdown(
+        """
+        # 🕵️ Deepfake Detector  
+        Upload a face image and the model will tell you if it's **Original** or a type of **Deepfake**.  
+        """
+    )
 
     with gr.Row():
         with gr.Column(scale=1):
@@ -89,7 +99,7 @@ with gr.Blocks(theme=gr.themes.Soft(), css="""
     # Example images
     gr.Examples(examples=examples, inputs=input_img, label="Try with example images")
 
-    # 📦 About Model Section
+    # 📦 About Model Section (neon green box)
     gr.HTML(
         """
         <div style="
@@ -104,6 +114,13 @@ with gr.Blocks(theme=gr.themes.Soft(), css="""
             <p>🔹 Trained on <b>FaceForensics++ (FF++) dataset</b></p>
             <p>🔹 Detects <b>Deepfakes, FaceSwap, Face2Face, Neural Textures and Original</b></p>
             <p>🔹 Achieved <b>92% accuracy</b> on unseen test data</p>
+
+            <h4>💡 Tips for Best Results</h4>
+            <ul>
+                <li>Upload clear frontal face images</li>
+                <li>Avoid low-light / blurred images</li>
+                <li>Works best on single-face photos</li>
+            </ul>
         </div>
         """
     )
