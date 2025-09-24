@@ -40,26 +40,8 @@ with gr.Blocks(theme=gr.themes.Soft()) as demo:
 
     with gr.Row():
         with gr.Column(scale=1):
-            # Upload Image box styled neon purple-pink
-            gr.HTML(
-                """
-                <div style="
-                    border: 2px solid;
-                    border-image: linear-gradient(45deg, #ff00ff, #ff1493) 1;
-                    border-radius: 15px;
-                    padding: 10px;
-                    background-color: transparent;
-                    color: inherit;
-                    box-shadow: 0 0 15px #ff00ff;
-                    margin-bottom: 10px;
-                ">
-                    <h3>📤 Upload Image</h3>
-                </div>
-                """
-            )
-            input_img = gr.Image(type="numpy", label="", sources=["upload"])
+            input_img = gr.Image(type="numpy", label="Upload Image", sources=["upload"])
             submit_btn = gr.Button("🔍 Detect", variant="primary")
-
         with gr.Column(scale=1):
             # Neon blue glowing prediction box (transparent background)
             gr.HTML(
