@@ -1,7 +1,3 @@
-# ==========================
-# app.py (Gradio UI with scanning overlay + neon boxes)
-# ==========================
-
 import gradio as gr
 from model_inference import model, transform, CLASS_NAMES, DEVICE
 import torch
@@ -13,10 +9,9 @@ import time
 # Inference function
 # --------------------------
 def classify(image):
-    # Simulate scanning time (overlay visible during this)
+    # Simulate processing delay
     time.sleep(2)
 
-    # Preprocess and run model
     image = Image.fromarray(image).convert("RGB")
     img_tensor = transform(image).unsqueeze(0).to(DEVICE)
     with torch.no_grad():
@@ -24,8 +19,7 @@ def classify(image):
         probs = F.softmax(outputs, dim=1)[0].cpu().numpy()
 
     results = {CLASS_NAMES[i]: float(probs[i]) for i in range(len(CLASS_NAMES))}
-    return results, ""  # clear overlay after prediction
-
+    return results
 
 # --------------------------
 # Build UI
@@ -64,12 +58,7 @@ with gr.Blocks(theme=gr.themes.Soft(), css="""
     100% { background-position: 0 100%; }
 }
 """) as demo:
-    gr.Markdown(
-        """
-        # 🕵️ Deepfake Detector  
-        Upload a face image and the model will tell you if it's **Original** or a type of **Deepfake**.  
-        """
-    )
+    gr.Markdown("# 🕵️ Deepfake Detector")
 
     with gr.Row():
         with gr.Column(scale=1):
@@ -98,13 +87,9 @@ with gr.Blocks(theme=gr.themes.Soft(), css="""
             output_label = gr.Label(num_top_classes=3, label="Prediction")
 
     # Example images
-    gr.Examples(
-        examples=examples,
-        inputs=input_img,
-        label="Try with example images"
-    )
+    gr.Examples(examples=examples, inputs=input_img, label="Try with example images")
 
-    # 📦 About Model Section (neon green box)
+    # 📦 About Model Section
     gr.HTML(
         """
         <div style="
@@ -119,26 +104,28 @@ with gr.Blocks(theme=gr.themes.Soft(), css="""
             <p>🔹 Trained on <b>FaceForensics++ (FF++) dataset</b></p>
             <p>🔹 Detects <b>Deepfakes, FaceSwap, Face2Face, Neural Textures and Original</b></p>
             <p>🔹 Achieved <b>92% accuracy</b> on unseen test data</p>
-
-            <h4>💡 Tips for Best Results</h4>
-            <ul>
-                <li>Upload clear frontal face images</li>
-                <li>Avoid low-light / blurred images</li>
-                <li>Works best on single-face photos</li>
-            </ul>
         </div>
         """
     )
 
     # --------------------------
-    # Event binding
+    # Event binding (two-step)
     # --------------------------
-    def wrap_with_overlay(img):
-        # Show overlay immediately
-        return classify(img)[0], """<div class='scan-overlay'></div>"""
+    # Step 1: Show overlay immediately
+    def show_overlay(img):
+        return None, """<div class='scan-overlay'></div>"""
+
+    # Step 2: Run model and hide overlay
+    def predict_and_hide(img):
+        preds = classify(img)
+        return preds, ""
 
     submit_btn.click(
-        fn=wrap_with_overlay,
+        fn=show_overlay,
+        inputs=input_img,
+        outputs=[output_label, overlay_html]
+    ).then(
+        fn=predict_and_hide,
         inputs=input_img,
         outputs=[output_label, overlay_html]
     )
