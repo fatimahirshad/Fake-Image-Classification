@@ -1,5 +1,5 @@
 # ==========================
-# app.py (Gradio UI)
+# app.py (Gradio UI) - Gradio 4.29 compatible
 # ==========================
 
 import gradio as gr
@@ -45,28 +45,26 @@ with gr.Blocks(theme=gr.themes.Soft()) as demo:
 
     with gr.Row():
         with gr.Column(scale=1):
-            # Removed webcam, allow only uploads
             input_img = gr.Image(type="numpy", label="Upload Image", sources=["upload"])
-            submit_btn = gr.Button("🔍 Detect", variant="primary")
+            submit_btn = gr.Button("🕵️ Detect", variant="primary")
         with gr.Column(scale=1):
             # Neon blue glowing prediction box
-            with gr.Box():
-                gr.Markdown(
-                    """
-                    <div style="
-                        border: 2px solid;
-                        border-image: linear-gradient(45deg, #00f, #00eaff) 1;
-                        border-radius: 15px;
-                        padding: 12px;
-                        background-color: #0a0a0a;
-                        color: #f5f5f5;
-                        box-shadow: 0 0 20px #00eaff;
-                    ">
-                        <h3>📊 Prediction (Top 3)</h3>
-                    </div>
-                    """,
-                )
-                output_label = gr.Label(num_top_classes=3, label="Prediction")
+            gr.HTML(
+                """
+                <div style="
+                    border: 2px solid;
+                    border-image: linear-gradient(45deg, #00f, #00eaff) 1;
+                    border-radius: 15px;
+                    padding: 12px;
+                    background-color: #0a0a0a;
+                    color: #f5f5f5;
+                    box-shadow: 0 0 20px #00eaff;
+                ">
+                    <h3>📊 Prediction (Top 3)</h3>
+                </div>
+                """
+            )
+            output_label = gr.Label(num_top_classes=3, label="Prediction")
 
             # 🔵 Scanning animation box (hidden by default)
             scan_box = gr.HTML(
@@ -106,32 +104,31 @@ with gr.Blocks(theme=gr.themes.Soft()) as demo:
         label="Try with example images"
     )
 
-    # 📦 About Model Section (neon green box)
-    with gr.Box():
-        gr.Markdown(
-            """
-            <div style="
-                border: 2px solid #39FF14; 
-                border-radius: 15px; 
-                padding: 15px; 
-                background-color: #0d0d0d; 
-                color: #f5f5f5;
-                box-shadow: 0 0 15px #39FF14;
-            ">
-                <h3>📦 About the Model</h3>
-                <p>🔹 Trained on <b>FaceForensics++ (FF++) dataset</b></p>
-                <p>🔹 Detects <b>Deepfakes, FaceSwap, Face2Face, Neural Textures and Original</b></p>
-                <p>🔹 Achieved <b>92% accuracy</b> on unseen test data</p>
+    # 📦 About Model Section (neon green styled box)
+    gr.HTML(
+        """
+        <div style="
+            border: 2px solid #39FF14; 
+            border-radius: 15px; 
+            padding: 15px; 
+            background-color: #0d0d0d; 
+            color: #f5f5f5;
+            box-shadow: 0 0 15px #39FF14;
+        ">
+            <h3>📦 About the Model</h3>
+            <p>🔹 Trained on <b>FaceForensics++ (FF++) dataset</b></p>
+            <p>🔹 Detects <b>Deepfakes, FaceSwap, Face2Face, Neural Textures and Original</b></p>
+            <p>🔹 Achieved <b>92% accuracy</b> on unseen test data</p>
 
-                <h4>💡 Tips for Best Results</h4>
-                <ul>
-                    <li>Upload clear frontal face images</li>
-                    <li>Avoid low-light / blurred images</li>
-                    <li>Works best on single-face photos</li>
-                </ul>
-            </div>
-            """,
-        )
+            <h4>💡 Tips for Best Results</h4>
+            <ul>
+                <li>Upload clear frontal face images</li>
+                <li>Avoid low-light / blurred images</li>
+                <li>Works best on single-face photos</li>
+            </ul>
+        </div>
+        """
+    )
 
     # 🔗 Button workflow: show scan box → run classify → hide scan box + show results
     submit_btn.click(
