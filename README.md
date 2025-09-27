@@ -1,6 +1,6 @@
 #  Fake Image Classification
 
-A deep learning project to detect **fake (deepfake/manipulated)** vs **real (original)** images using a **Convolutional Neural Network (CNN)** trained on the **FaceForensics++ dataset**.
+A deep learning project to detect **fake (deepfake/manipulated)** vs **real (original)** images using a **Convolutional Neural Network (CNN)** trained on the [**FaceForensics++ C32**](https://github.com/ondyari/FaceForensics)
 
 Includes a **Gradio web app** with a neon-themed UI and a **scanning effect** that simulates image analysis.
 
