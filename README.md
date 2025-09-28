@@ -46,13 +46,6 @@ The project is live on **Hugging Face Spaces** 🚀, allowing you to test the mo
 
 👉 [**Try Fake Image Classification App**](https://huggingface.co/spaces/fatima-irshad/deepfake-detector)
 
-***
-
-##  Report
-
-See full project documentation:
-
-`reports/Fake_Image_Classification_Report.pdf`
 
 ***
 
