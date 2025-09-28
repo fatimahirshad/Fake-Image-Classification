@@ -18,21 +18,25 @@ Includes a **Gradio web app** with a neon-themed UI and a **scanning effect** th
 
 ##  Dataset
 
-This model was trained on the large-scale **FaceForensics++ (FF++) dataset**.
+This model was trained on the large-scale [**FaceForensics++ C32**](https://github.com/ondyari/FaceForensics).
+And from this dataset I have made 2 datasets
 
 > **Note:** Due to size, the full dataset is **not included** in this repository.
 
-👉 [**FaceForensics++ C32 Frames (Cropped+Aligned)**](https://www.kaggle.com/datasets/fatimahirshad/faceforensics-c32-frames-cropped-aligned)
+👉 1. [**FaceForensics++ Extracted Dataset (C23)**](https://www.kaggle.com/datasets/fatimahirshad/faceforensics-extracted-dataset-c23) In this dataset, i extracted frames 5/video from 6 classes (Deepfakes, Face2Face,FaceShifter, FaceSwap, NeuralTextures, Original), **TOTAL= 30k frames**.
+
+👉 2. [**FaceForensics++ C32 Frames (Cropped+Aligned)**](https://www.kaggle.com/datasets/fatimahirshad/faceforensics-c32-frames-cropped-aligned) In this dataset. i just cropped and alingned these frames from above dataset and use in building this model. 
+
 
 ***
 
 ##  Demo
 
-Upload an image or test with included examples (`example_images/`).
+Upload an image or test with included examples (`<img width="778" height="571" alt="image" src="https://github.com/user-attachments/assets/b445b75d-b58c-4687-a6cc-00d81f87fddd" />
+`).
 
 The app will show a **scanning effect** and then return prediction results.
 
-(Replace with actual screenshot of your app UI)
 
 ***
 
