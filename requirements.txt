@@ -1,5 +1,7 @@
+
+streamlit
 torch
 torchvision
-Pillow
-streamlit
+pillow
 numpy
+protobuf==3.20.*
